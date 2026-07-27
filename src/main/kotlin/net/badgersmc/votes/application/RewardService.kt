@@ -12,18 +12,16 @@ class RewardService(
 ) {
     companion object {
         /** How long the mining multiplier lasts after activation (millis). */
-        const val MULTIPLIER_DURATION_MS: Long = 20 * 60 * 1000L  // 20 minutes
+        const val MULTIPLIER_DURATION_MS: Long = 24 * 60 * 60 * 1000L  // 24 hours
     }
 
     /**
-     * Called after a vote that increased the streak.
-     * If the new streak crosses a threshold, records the activation time so the
-     * multiplier is active for [MULTIPLIER_DURATION_MS].
+     * Called after every vote. Activates (or refreshes) the mining multiplier
+     * for [MULTIPLIER_DURATION_MS] whenever the player's streak is 3+.
+     * Returns true if the multiplier was just activated/refreshed.
      */
-    fun tryActivateMultiplier(uuid: UUID, newStreak: Int, oldStreak: Int): Boolean {
-        val oldTier = streakMultiplierTier(oldStreak)
-        val newTier = streakMultiplierTier(newStreak)
-        if (newTier > oldTier) {
+    fun tryActivateMultiplier(uuid: UUID, streak: Int): Boolean {
+        if (streak >= 3) {
             voteRepository.activateMultiplier(uuid)
             return true
         }
@@ -52,13 +50,6 @@ class RewardService(
         else         -> 1.0
     }
 
-    private fun streakMultiplierTier(streak: Int): Int = when {
-        streak >= 30 -> 3
-        streak >= 7  -> 2
-        streak >= 3  -> 1
-        else         -> 0
-    }
-
     fun buildVoteMessage(
         playerName: String,
         gold: Int,
@@ -66,15 +57,24 @@ class RewardService(
         streak: Int,
         serviceName: String,
     ): Component {
-        val streakStr: String = if (streak > 1)
-            MiniMessage.miniMessage().serialize(lang.msg("voteparty.streak_suffix", "streak" to streak.toString()))
-        else ""
-        return lang.msg(
-            "voteparty.reward_message",
-            "player" to playerName,
-            "service" to serviceName,
-            "multiplier" to multiplier.toString(),
-            "streak_text" to streakStr,
+        val streakText = MiniMessage.miniMessage().serialize(
+            lang.msg("voteparty.streak_suffix", "streak" to streak.toString())
         )
+        return if (multiplier > 1.0) {
+            lang.msg(
+                "voteparty.reward_message_multiplier",
+                "player" to playerName,
+                "service" to serviceName,
+                "multiplier" to multiplier.toString(),
+                "streak_text" to streakText,
+            )
+        } else {
+            lang.msg(
+                "voteparty.reward_message",
+                "player" to playerName,
+                "service" to serviceName,
+                "streak_text" to streakText,
+            )
+        }
     }
 }
