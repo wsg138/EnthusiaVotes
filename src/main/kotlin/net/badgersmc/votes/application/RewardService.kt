@@ -12,7 +12,7 @@ class RewardService(
 ) {
     companion object {
         /** How long the mining multiplier lasts after activation (millis). */
-        const val MULTIPLIER_DURATION_MS: Long = 24 * 60 * 60 * 1000L  // 24 hours
+        const val MULTIPLIER_DURATION_MS: Long = 20 * 60 * 1000L  // 20 minutes per daily vote
     }
 
     /**

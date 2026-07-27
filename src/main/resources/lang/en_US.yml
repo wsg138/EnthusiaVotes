@@ -41,7 +41,7 @@ admin:
 voteparty:
   broadcast: "<shadow:#000000:1><gradient:gold:yellow>VOTE PARTY!</gradient> Mining multipliers are now <gold>doubled</gold> for <aqua><minutes> minutes</aqua>!</shadow>"
   reward_message: "<shadow:#000000:1><yellow><player></yellow> voted on <aqua><service></aqua>!<streak_text></shadow>"
-  reward_message_multiplier: "<shadow:#000000:1><yellow><player></yellow> voted on <aqua><service></aqua>!<streak_text> — <gold><multiplier>x mining for 24h!</gold></shadow>"
+  reward_message_multiplier: "<shadow:#000000:1><yellow><player></yellow> voted on <aqua><service></aqua>!<streak_text> — <gold><multiplier>x mining for 20m!</gold></shadow>"
   streak_suffix: "<shadow:#000000:1> <gray>Streak: <streak> 🔥</gray></shadow>"
   multiplier_info: "<shadow:#000000:1><gray>Streak 3-6: 1.5x | 7-29: 2x | 30+: 3x | VoteParty: 2x</gray></shadow>"
   mining_multiplier_active: "<shadow:#000000:1><green>Mining multiplier active: <multiplier>x</green></shadow>"

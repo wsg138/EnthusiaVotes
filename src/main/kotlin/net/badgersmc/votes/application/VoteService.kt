@@ -73,7 +73,7 @@ class VoteService(
             broadcaster.broadcastVoteParty(partyMsg)
         }
 
-        // Activate/refresh mining multiplier if streak is 3+ (lasts 24h)
+        // Activate/refresh mining multiplier if streak is 3+ (lasts 20m)
         val newStats = repo.getStats(playerUuid)
         rewardService.tryActivateMultiplier(playerUuid, newStats.currentStreak)
 
