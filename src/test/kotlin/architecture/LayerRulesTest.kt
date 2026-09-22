@@ -21,11 +21,11 @@ class LayerRulesTest {
             .filter {
                 it.hasImport { imported -> imported.name.startsWith("net.badgersmc.votes.infrastructure") }
             }
-            .map { it.name }
+            .map { it.name.removeSuffix(".kt") }
             .toSet()
 
         assertEquals(
-            setOf("VotePartyService.kt", "VoteService.kt"),
+            setOf("VotePartyService", "VoteService"),
             offenders,
             "new application-to-infrastructure dependencies require an explicit architecture decision",
         )
