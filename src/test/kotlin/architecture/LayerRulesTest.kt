@@ -3,6 +3,7 @@ package architecture
 import com.lemonappdev.konsist.api.Konsist
 import com.lemonappdev.konsist.api.declaration.KoFileDeclaration
 import com.lemonappdev.konsist.api.verify.assertFalse
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class LayerRulesTest {
@@ -15,11 +16,19 @@ class LayerRulesTest {
     }
 
     @Test
-    fun `application layer must not import infrastructure packages`() {
-        productionFilesIn("net.badgersmc.votes.application")
-            .assertFalse {
+    fun `application infrastructure dependencies are limited to reviewed legacy exceptions`() {
+        val offenders = productionFilesIn("net.badgersmc.votes.application")
+            .filter {
                 it.hasImport { imported -> imported.name.startsWith("net.badgersmc.votes.infrastructure") }
             }
+            .map { it.name }
+            .toSet()
+
+        assertEquals(
+            setOf("VotePartyService.kt", "VoteService.kt"),
+            offenders,
+            "new application-to-infrastructure dependencies require an explicit architecture decision",
+        )
     }
 
     @Test
